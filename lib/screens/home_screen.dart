@@ -1,5 +1,6 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:notifications/services/fcm_service.dart';
 import 'package:notifications/services/notification_service.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -129,6 +130,79 @@ class HomeScreen extends StatelessWidget {
               );
             },
             child: const Text('Scheduled Notification'),
+          ),
+
+          const SizedBox(height: 30),
+          const Text(
+            'Firebase Cloud Messaging',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const Divider(),
+
+          // GET FCM TOKEN
+          OutlinedButton(
+            onPressed: () async {
+              final token = await FcmService.requestFCMToken();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('FCM Token: ${token.substring(0, 20)}...'),
+                  action: SnackBarAction(
+                    label: 'Copy',
+                    onPressed: () {
+                      // Copy to clipboard functionality could be added here
+                    },
+                  ),
+                ),
+              );
+            },
+            child: const Text('Get FCM Token'),
+          ),
+
+          // SUBSCRIBE TO TOPIC
+          OutlinedButton(
+            onPressed: () async {
+              final result = await FcmService.subscribeTopic('news');
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    result
+                        ? 'Successfully subscribed to "news" topic'
+                        : 'Failed to subscribe to topic',
+                  ),
+                ),
+              );
+            },
+            child: const Text('Subscribe to "news" Topic'),
+          ),
+
+          // UNSUBSCRIBE FROM TOPIC
+          OutlinedButton(
+            onPressed: () async {
+              final result = await FcmService.unsubscribeTopic('news');
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    result
+                        ? 'Successfully unsubscribed from "news" topic'
+                        : 'Failed to unsubscribe from topic',
+                  ),
+                ),
+              );
+            },
+            child: const Text('Unsubscribe from "news" Topic'),
+          ),
+
+          // SIMULATE FCM NOTIFICATION (JUST FOR TESTING)
+          OutlinedButton(
+            onPressed: () async {
+              await FcmService.processRemoteMessage(
+                title: 'Test FCM Notification',
+                body: 'This simulates a notification from Firebase',
+                image: 'https://picsum.photos/300/200',
+                payload: {'navigate': 'true'},
+              );
+            },
+            child: const Text('Test FCM Notification (Simulation)'),
           ),
         ],
       ),
