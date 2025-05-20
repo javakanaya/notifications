@@ -2,6 +2,10 @@
 
 A comprehensive Flutter application demonstrating various notification implementations using Awesome Notifications and Firebase Cloud Messaging (FCM).
 
+# Preview
+
+https://youtu.be/zdrGLnxhJFY
+
 ## Features
 
 This app showcases a wide range of notification capabilities in Flutter:
